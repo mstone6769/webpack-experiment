@@ -1,0 +1,7 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "no-empty": "warn",
+    "no-cond-assign": ["error", "always"]
+  }
+}

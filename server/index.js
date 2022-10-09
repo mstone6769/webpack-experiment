@@ -1,38 +1,45 @@
-const express = require( 'express' );
-const fs = require( 'fs' );
-const path = require( 'path' );
-const React = require( 'react' );
-const ReactDOMServer = require( 'react-dom/server' );
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const config = require('../webpack/webpack.client.config');
+const compiler = webpack(config);
+
 import { App } from '../client/components/App';
+
+const indexHTML = fs.readFileSync( path.resolve( __dirname, '../dist/client/index.html' ), {
+  encoding: 'utf8',
+});
 
 // create express application
 const app = express();
 
-app.get( /\.(js|css|map|ico)$/, express.static( path.resolve( __dirname, '../dist/client' ) ) );
+app.use(
+  webpackDevMiddleware(compiler, {
+    publicPath: config.output.publicPath,
+    index: false
+  })
+);
+
+app.get( /\.(js|txt|css|map|ico)$/, express.static( path.resolve( __dirname, '../dist/client' ) ) );
 
 // for any other requests, send `index.html` as a response
 app.use( '*', ( req, res ) => {
 
-  // read `index.html` file
-  let indexHTML = fs.readFileSync( path.resolve( __dirname, '../dist/client/index.html' ), {
-      encoding: 'utf8',
-  } );
-
-  // set header and status
- 
-
-  // get HTML string from the `App` component
-  let appHTML = ReactDOMServer.renderToString( <App /> );
+  const appHTML = ReactDOMServer.renderToString(<App />);
 
   // populate `#app` element with `appHTML`
-  indexHTML = indexHTML.replace( '<div id="app"></div>', `<div id="app">${ appHTML }</div>` );
+  const pageHTML = indexHTML.replace('<div id="app"></div>', `<div id="app">${ appHTML }</div>`);
 
-  res.contentType( 'text/html' );
-  res.status( 200 );
-  return res.send( indexHTML );
+  res.contentType('text/html');
+  res.status(200);
+  return res.send(pageHTML);
 } );
 
 // run express server on port 9000
 app.listen( '9000', () => {
   console.log( 'Express server started at http://localhost:9000' );
-} );
+});

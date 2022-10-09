@@ -1,11 +1,11 @@
 const path = require('path');
-const clientPort = 9000;
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
+  mode: 'development',
   target: 'web',
   entry: {
-    client: [path.resolve(__dirname, '../client/index.js')]
+    main: path.resolve(__dirname, '../client/main.js')
   },
   module: {
     rules: [
@@ -32,11 +32,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../dist/client'),
     filename: '[name].bundle.js',
-    publicPath: `http://localhost:${clientPort}/`
-  },
-  devServer: {
-    port: clientPort, // [C]
-    liveReload: true
+    publicPath: '/'
   },
   devtool: 'source-map'
 };
