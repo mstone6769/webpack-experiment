@@ -5,23 +5,23 @@ module.exports = {
   mode: 'development',
   target: 'node',
   entry: {
-    server: path.resolve(__dirname, '../server/index.js')
+    server: path.resolve(__dirname, '../server/index.js'),
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader']
-      }
-    ]
+        use: ['babel-loader'],
+      },
+    ],
   },
   externals: [webpackNodeExternals()],
   resolve: {
-    extensions: ['.jsx', '.js']
+    extensions: ['.jsx', '.js'],
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: 'server.js'
-  }
+    filename: 'server.js',
+  },
 };
