@@ -8,9 +8,8 @@
     "build:client": "webpack --config webpack/webpack.client.config.js",
     "build:server": "webpack --config webpack/webpack.server.config.js",
     "start:server": "node dist/server.js",
-    "dev:server": "npm run clear && npm run build:client && npm run build:server && npm run start:server",
-    "dev": "run-p dev:client dev:server",
-    "start": "npm run dev",
+    "dev:server": "run-s clear build:client build:server start:server",
+    "start": "npm run dev:server",
     "lint": "eslint ./**/*.js[x] ./server/*.js ./client/*.js[x] --fix"
   },
   "author": "Morgan Stone <mstone@designbymorgan.com>",
