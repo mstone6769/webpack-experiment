@@ -3,7 +3,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const HTMLPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   target: 'web',
   entry: {
     atf: path.resolve(__dirname, '../client/partials/atf-bootstrapper.jsx')
