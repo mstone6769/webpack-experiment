@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 export function Part2({pageData}) {
-  const [name, setName] = useState(pageData.name);
+  const [name, setName] = useState('thirsty');
   useEffect(() => {
     setName('hydrated');
   });

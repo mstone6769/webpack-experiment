@@ -12,10 +12,8 @@ window.addEventListener('scroll', boostrapOtherSections)
 function boostrapOtherSections () {
   window.removeEventListener('click', boostrapOtherSections)
   window.removeEventListener('scroll', boostrapOtherSections)
-  return loadFiles();
-}
 
-function loadFiles () {
+  // load other sections
   return Promise.all([
     import('./part2-bootstrapper'),
     import('./part3-bootstrapper')

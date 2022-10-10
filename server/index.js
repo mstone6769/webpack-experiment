@@ -35,7 +35,7 @@ app.get(/\.(js|txt|css|map|ico)$/, express.static(path.resolve(__dirname, '../di
 // for any other requests, send `index.html` as a response
 app.use('*', (req, res) => {
   const props = {
-    pageData: { name: 'thirsty' },
+    pageData: { data: 'good' },
   };
   let pageHTML = indexHTML.replace('PAGE_DATA = {}', `PAGE_DATA = ${JSON.stringify(props.pageData)}`);
   partials.forEach(({ id, component }) => {

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 export function Part3({pageData}) {
-  const [name, setName] = useState(pageData.name);
+  const [name, setName] = useState('thirsty');
   useEffect(() => {
     setName('hydrated');
   });
   return (
     <>
-      <h2>Part 2 - {name}</h2>
+      <h2>Part 3 - {name}</h2>
       <pre>{JSON.stringify(pageData)}</pre>
     </>
   );

@@ -34,12 +34,6 @@ module.exports = {
   resolve: {
     extensions: ['.jsx', '.js'],
   },
-  optimization: {
-    splitChunks: {
-      // include all types of chunks
-      chunks: 'all',
-    },
-  },
   output: {
     path: path.resolve(__dirname, '../dist/client'),
     filename: '[name].[chunkhash].js',
