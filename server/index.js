@@ -4,7 +4,9 @@ import path from 'path';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 
-import { App } from '../client/components/App';
+import { partials } from '../client/partials';
+
+const compression = require('compression');
 
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -19,6 +21,8 @@ const indexHTML = fs.readFileSync(path.resolve(__dirname, '../dist/client/index.
 // create express application
 const app = express();
 
+app.use(compression());
+
 app.use(
   webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
@@ -30,10 +34,15 @@ app.get(/\.(js|txt|css|map|ico)$/, express.static(path.resolve(__dirname, '../di
 
 // for any other requests, send `index.html` as a response
 app.use('*', (req, res) => {
-  const appHTML = ReactDOMServer.renderToString(<App />);
-
-  // populate `#app` element with `appHTML`
-  const pageHTML = indexHTML.replace('<div id="app"></div>', `<div id="app">${appHTML}</div>`);
+  const props = {
+    pageData: { name: 'thirsty' },
+  };
+  let pageHTML = indexHTML.replace('PAGE_DATA = {}', `PAGE_DATA = ${JSON.stringify(props.pageData)}`);
+  partials.forEach(({ id, component }) => {
+    const jsx = component(props);
+    const appHTML = ReactDOMServer.renderToString(jsx);
+    pageHTML = pageHTML.replace(`id="${id}">`, `id="${id}">${appHTML}`);
+  });
 
   res.contentType('text/html');
   res.status(200);

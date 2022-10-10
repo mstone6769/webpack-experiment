@@ -1,11 +1,12 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const HTMLPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
   target: 'web',
   entry: {
-    main: path.resolve(__dirname, '../client/main.js'),
+    atf: path.resolve(__dirname, '../client/partials/atf-bootstrapper.jsx')
   },
   module: {
     rules: [
@@ -17,6 +18,10 @@ module.exports = {
     ],
   },
   plugins: [
+    new HTMLPlugin({
+      template: path.resolve(__dirname, '../client/index.html'),
+      inject: 'body'
+    }),
     new CopyPlugin({
       patterns: [
         {
@@ -29,9 +34,15 @@ module.exports = {
   resolve: {
     extensions: ['.jsx', '.js'],
   },
+  optimization: {
+    splitChunks: {
+      // include all types of chunks
+      chunks: 'all',
+    },
+  },
   output: {
     path: path.resolve(__dirname, '../dist/client'),
-    filename: '[name].bundle.js',
+    filename: '[name].[chunkhash].js',
     publicPath: '/',
   },
   devtool: 'source-map',

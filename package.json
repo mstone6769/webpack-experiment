@@ -11,11 +11,12 @@
     "dev:server": "npm run clear && npm run build:client && npm run build:server && npm run start:server",
     "dev": "run-p dev:client dev:server",
     "start": "npm run dev",
-    "lint": "eslint ./**/*.js[x] ./server/*.js ./client/*.js --fix"
+    "lint": "eslint ./**/*.js[x] ./server/*.js ./client/*.js[x] --fix"
   },
   "author": "Morgan Stone <mstone@designbymorgan.com>",
   "license": "ISC",
   "dependencies": {
+    "compression": "^1.7.4",
     "express": "^4.18.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
