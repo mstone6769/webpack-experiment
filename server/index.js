@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
+import Page from './Page';
 const compression = require('compression');
 
 import { partials } from './partials';
@@ -50,16 +51,9 @@ const pageTypes = {
 };
 
 function renderHTMLAndData (props) {
-  const pageType = props?.pageData?.pageType || 'basic';
-  const pageTypeData = pageTypes[pageType];
-  const baseHTML = indexHTML.replace('PAGE_DATA = {}', `PAGE_DATA = ${JSON.stringify(props.pageData)}`)
-                            .replace('%ATF_ID%', pageTypeData['%ATF_ID%'])
-                            .replace('%ATF_SCRIPT_PATH%', pageTypeData['%ATF_SCRIPT_PATH%']);
-  return partials.reduce((html, { id, component }) => {
-    const jsx = component(props);
-    const partialHTML = ReactDOMServer.renderToString(jsx);
-    return html.replace(`id="${id}">`, `id="${id}">${partialHTML}`);
-  }, baseHTML);
+  const baseHTML = indexHTML.replace('PAGE_DATA = {}', `PAGE_DATA = ${JSON.stringify(props.pageData)}`);
+  const pageComponentHTML = ReactDOMServer.renderToString(<Page {...props} parsedManifest={parsedManifest} />);
+  return baseHTML.replace('%PAGE_COMPONENTS%', pageComponentHTML);
 }
 
 function getPageProps (page = 0) {
