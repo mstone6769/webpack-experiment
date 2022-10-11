@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-export function ATF({pageData}) {
+export function ATFSpecial({pageData}) {
   const [name, setName] = useState('thirsty');
   useEffect(() => {
     setName('hydrated');
@@ -8,10 +8,10 @@ export function ATF({pageData}) {
   return (
     <>
       <h1>Compiled Page</h1>
-      <h2>ATF - {name}</h2>
+      <h2>ATF Special - {name}</h2>
       <pre>{JSON.stringify(pageData)}</pre>
     </>
   );
 }
 
-export default ATF;
+export default ATFSpecial;

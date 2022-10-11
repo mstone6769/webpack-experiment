@@ -6,4 +6,5 @@ Experimenting with webpack module loading and multi-React hydration
 
 1. `npm i`
 1. `npm start`
-1. Go to http://localhost:9000/
+1. Special: Go to http://localhost:9000/?page=2
+1. Basic: Go to http://localhost:9000/?page=3
