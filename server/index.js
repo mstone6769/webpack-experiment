@@ -47,17 +47,33 @@ function renderHTMLAndData (props) {
   }, indexHTML.replace('PAGE_DATA = {}', `PAGE_DATA = ${JSON.stringify(props.pageData)}`)).replace('ATF_SCRIPT_PATH', parsedManifest[atfScript]);
 }
 
+function getPageProps (page = 0) {
+
+  // special 
+  if (parseInt(page, 10) % 2 === 0) {
+    return {
+      pageData: {
+        pageType: 'special',
+        data: 'good',
+        sections: ['part3', 'part2']
+      }
+    };
+  }
+
+  return {
+    pageData: {
+      pageType: 'basic',
+      data: 'good',
+      sections: ['part2', 'part3']
+    }
+  };
+}
+
 // for any other requests, send `index.html` as a response
 app.use('*', (req, res) => {
 
-  let page = req.query.page || 0;
-  const props = {
-    pageData: {
-      pageType: parseInt(page, 10) % 2 === 0 ? 'special' : 'basic',
-      data: 'good'
-    },
-  };
-
+  let page = req.query.page;
+  const props = getPageProps(page);
   const pageHTML = renderHTMLAndData(props);
 
   res.contentType('text/html');

@@ -4,6 +4,7 @@ import ATFSpecial from '../client/partials/ATFSpecial';
 import ATFBasic from '../client/partials/ATFBasic';
 import Part2 from '../client/partials/Part2';
 import Part3 from '../client/partials/Part3';
+import BTF from '../client/partials/BTF';
 
 export const partials = [
   {
@@ -14,6 +15,10 @@ export const partials = [
       }
       return <ATFBasic {...props} />
     },
+  },
+  {
+    id: 'btf', // this must be before the other sections
+    component: (props) => <BTF {...props} />,
   },
   {
     id: 'part2',
