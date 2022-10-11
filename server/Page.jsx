@@ -19,31 +19,33 @@ export function BTF({pageData}) {
   });
 }
 
+export function ATF({pageData, parsedManifest}) {
+  const pageType = pageData?.pageType || 'basic';
+
+  if (pageType === 'special') {
+    const scriptPath = parsedManifest['atf-special.js'];
+    return (
+      <>
+        <div id="atf-special"><ATFSpecial pageData={pageData} /></div>
+        <script async src={scriptPath}></script>
+      </>
+    )
+  }
+  const scriptPath = parsedManifest['atf-basic.js'];
+  return (
+    <>
+      <div id="atf-basic"><ATFBasic pageData={pageData} /></div>
+      <script async src={scriptPath}></script>
+    </>
+  )
+}
+
 // used only for server side rendering
 export function Page({pageData, parsedManifest}) {
   const props = { pageData };
-  const pageTypes = {
-    basic: {
-      id: 'atf-basic',
-      scriptPath: parsedManifest['atf-basic.js'],
-      ATFComponent: <ATFBasic {...props} />
-    },
-    special: {
-      id: 'atf-special',
-      scriptPath: parsedManifest['atf-special.js'],
-      ATFComponent: <ATFSpecial {...props} />
-    }
-  };
-
-  const pageType = props?.pageData?.pageType || 'basic';
-  const pageTypeData = pageTypes[pageType];
-
   return (
     <>
-      <div id={pageTypeData.id}>
-        {pageTypeData.ATFComponent}
-      </div>
-      <script async src={pageTypeData.scriptPath}></script>
+      <ATF pageData={pageData} parsedManifest={parsedManifest} />
       <BTF {...props} />
     </>
   )

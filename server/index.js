@@ -6,8 +6,6 @@ import ReactDOMServer from 'react-dom/server';
 import Page from './Page';
 const compression = require('compression');
 
-import { partials } from './partials';
-
 const manifest = fs.readFileSync(path.resolve(__dirname, '../dist/client/manifest.json'), {
   encoding: 'utf8',
 });
@@ -38,17 +36,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.get(/\.(js|txt|css|map|ico)$/, express.static(path.resolve(__dirname, '../dist/client')));
-
-const pageTypes = {
-  basic: {
-    '%ATF_ID%': 'atf-basic',
-    '%ATF_SCRIPT_PATH%': parsedManifest['atf-basic.js']
-  },
-  special: {
-    '%ATF_ID%': 'atf-special',
-    '%ATF_SCRIPT_PATH%': parsedManifest['atf-special.js']
-  }
-};
 
 function renderHTMLAndData (props) {
   const baseHTML = indexHTML.replace('PAGE_DATA = {}', `PAGE_DATA = ${JSON.stringify(props.pageData)}`);
