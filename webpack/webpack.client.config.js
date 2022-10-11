@@ -1,21 +1,15 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const HTMLPlugin = require('html-webpack-plugin');
+const { merge } = require('webpack-merge');
 
-module.exports = {
+const sharedConfig = require('./webpack.shared.config');
+
+const config = {
   mode: 'production',
   target: 'web',
   entry: {
     atf: path.resolve(__dirname, '../client/partials/atf-bootstrapper.jsx')
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
-      },
-    ],
   },
   plugins: [
     new HTMLPlugin({
@@ -31,13 +25,11 @@ module.exports = {
       ],
     }),
   ],
-  resolve: {
-    extensions: ['.jsx', '.js'],
-  },
   output: {
     path: path.resolve(__dirname, '../dist/client'),
     filename: '[name].[chunkhash].js',
     publicPath: '/',
   },
-  devtool: 'source-map',
 };
+
+module.exports = merge(sharedConfig, config);

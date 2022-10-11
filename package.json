@@ -1,5 +1,6 @@
 {
   "name": "webpack-experiment",
+  "sideEffects": false,
   "version": "1.0.0",
   "description": "experiment with webpack",
   "main": "index.js",
@@ -9,7 +10,7 @@
     "build:server": "webpack --config webpack/webpack.server.config.js",
     "start:server": "node dist/server.js",
     "dev:server": "run-s clear build:client build:server start:server",
-    "start": "npm run dev:server",
+    "start": "NODE_ENV=production npm run dev:server",
     "lint": "eslint ./**/*.js[x] ./server/*.js ./client/*.js[x] --fix"
   },
   "author": "Morgan Stone <mstone@designbymorgan.com>",
@@ -40,6 +41,7 @@
     "webpack-cli": "^4.10.0",
     "webpack-dev-middleware": "^5.3.3",
     "webpack-dev-server": "^4.11.1",
+    "webpack-merge": "^5.8.0",
     "webpack-node-externals": "^3.0.0"
   }
 }

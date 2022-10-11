@@ -1,27 +1,19 @@
 const path = require('path');
 const webpackNodeExternals = require('webpack-node-externals');
+const { merge } = require('webpack-merge');
 
-module.exports = {
-  mode: 'production',
+const sharedConfig = require('./webpack.shared.config');
+
+const config = {
   target: 'node',
   entry: {
     server: path.resolve(__dirname, '../server/index.js'),
   },
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
-      },
-    ],
-  },
   externals: [webpackNodeExternals()],
-  resolve: {
-    extensions: ['.jsx', '.js'],
-  },
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'server.js',
   },
 };
+
+module.exports = merge(sharedConfig, config);

@@ -3,16 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-
-import { partials } from '../client/partials';
-
 const compression = require('compression');
 
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const config = require('../webpack/webpack.client.config');
-
-const compiler = webpack(config);
+import { partials } from '../client/partials';
 
 const indexHTML = fs.readFileSync(path.resolve(__dirname, '../dist/client/index.html'), {
   encoding: 'utf8',
@@ -23,12 +16,18 @@ const app = express();
 
 app.use(compression());
 
-app.use(
-  webpackDevMiddleware(compiler, {
-    publicPath: config.output.publicPath,
-    index: false,
-  }),
-);
+if (process.env.NODE_ENV !== 'production') {
+  const webpack = require('webpack');
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const config = require('../webpack/webpack.client.config');
+  const compiler = webpack(config);
+  app.use(
+    webpackDevMiddleware(compiler, {
+      publicPath: config.output.publicPath,
+      index: false,
+    }),
+  );
+}
 
 app.get(/\.(js|txt|css|map|ico)$/, express.static(path.resolve(__dirname, '../dist/client')));
 
@@ -37,12 +36,12 @@ app.use('*', (req, res) => {
   const props = {
     pageData: { data: 'good' },
   };
-  let pageHTML = indexHTML.replace('PAGE_DATA = {}', `PAGE_DATA = ${JSON.stringify(props.pageData)}`);
-  partials.forEach(({ id, component }) => {
+
+  const pageHTML = partials.reduce((html, { id, component }) => {
     const jsx = component(props);
     const appHTML = ReactDOMServer.renderToString(jsx);
-    pageHTML = pageHTML.replace(`id="${id}">`, `id="${id}">${appHTML}`);
-  });
+    return html.replace(`id="${id}">`, `id="${id}">${appHTML}`);
+  }, indexHTML.replace('PAGE_DATA = {}', `PAGE_DATA = ${JSON.stringify(props.pageData)}`));
 
   res.contentType('text/html');
   res.status(200);
