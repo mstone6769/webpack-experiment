@@ -8,13 +8,12 @@ import BTF from '../client/partials/BTF';
 
 export const partials = [
   {
-    id: 'ATF',
-    component: (props) => {
-      if (props?.pageData?.pageType === 'special') {
-        return <ATFSpecial {...props} />;
-      }
-      return <ATFBasic {...props} />
-    },
+    id: 'atf-basic',
+    component: (props) => <ATFBasic {...props} />,
+  },
+  {
+    id: 'atf-special',
+    component: (props) => <ATFSpecial {...props} />,
   },
   {
     id: 'btf', // this must be before the other sections

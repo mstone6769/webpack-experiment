@@ -4,7 +4,7 @@ import ATFBasic from './ATFBasic';
 import bootBTFSections from './boot-other-sections';
 
 const pageData = window.PAGE_DATA;
-const rootElement = document.getElementById('ATF');
+const rootElement = document.getElementById('atf-basic');
 ReactDOM.hydrateRoot(rootElement, <ATFBasic pageData={pageData} />);
 
 bootBTFSections();

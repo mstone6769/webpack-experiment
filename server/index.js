@@ -38,13 +38,28 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.get(/\.(js|txt|css|map|ico)$/, express.static(path.resolve(__dirname, '../dist/client')));
 
+const pageTypes = {
+  basic: {
+    '%ATF_ID%': 'atf-basic',
+    '%ATF_SCRIPT_PATH%': parsedManifest['atf-basic.js']
+  },
+  special: {
+    '%ATF_ID%': 'atf-special',
+    '%ATF_SCRIPT_PATH%': parsedManifest['atf-special.js']
+  }
+};
+
 function renderHTMLAndData (props) {
-  const atfScript = (props.pageData.pageType === 'special') ? 'atf-special.js' : 'atf-basic.js';
+  const pageType = props?.pageData?.pageType || 'basic';
+  const pageTypeData = pageTypes[pageType];
+  const baseHTML = indexHTML.replace('PAGE_DATA = {}', `PAGE_DATA = ${JSON.stringify(props.pageData)}`)
+                            .replace('%ATF_ID%', pageTypeData['%ATF_ID%'])
+                            .replace('%ATF_SCRIPT_PATH%', pageTypeData['%ATF_SCRIPT_PATH%']);
   return partials.reduce((html, { id, component }) => {
     const jsx = component(props);
     const partialHTML = ReactDOMServer.renderToString(jsx);
     return html.replace(`id="${id}">`, `id="${id}">${partialHTML}`);
-  }, indexHTML.replace('PAGE_DATA = {}', `PAGE_DATA = ${JSON.stringify(props.pageData)}`)).replace('ATF_SCRIPT_PATH', parsedManifest[atfScript]);
+  }, baseHTML);
 }
 
 function getPageProps (page = 0) {
