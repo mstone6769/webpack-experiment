@@ -40,7 +40,7 @@ app.get(/\.(js|txt|css|map|ico)$/, express.static(path.resolve(__dirname, '../di
 function renderHTMLAndData (props) {
   const baseHTML = indexHTML.replace('PAGE_DATA = {}', `PAGE_DATA = ${JSON.stringify(props.pageData)}`);
   const pageComponentHTML = ReactDOMServer.renderToString(<Page {...props} parsedManifest={parsedManifest} />);
-  return baseHTML.replace('%PAGE_COMPONENTS%', pageComponentHTML);
+  return baseHTML.replace('<!--%PAGE_COMPONENTS%-->', pageComponentHTML);
 }
 
 function getPageProps (page = 0) {
